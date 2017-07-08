@@ -16,11 +16,12 @@ Linked lists are basic, node-based structures in which nodes are connected direc
  - `search` - finding the desired element in the linked list takes O(n) time;
  - `insert` - inserting an element into a certain position in the linked list takes O(1) time, provided a handle to that position is in possession (otherwise `search` needs to be performed first);
  - `delete` - deleting an element from the linked list takes O(1) time, provided a handle to the object to be deleted is in possession (otherwise `search` needs to be performed first);
+Insertions and deletions are particularly fast, because they are performed basically by exchanging links. Searching runs in linear time, because there is no way to randomly access list elements. At worst case, whole list may be traversed.
 
 Because of its nodal nature, linked lists in general do not occupy a contiguous sequence of memory. The C++ Standard Library provides linked lists in the [`<list>`](http://en.cppreference.com/w/cpp/header/list) header.
 
 ### <a name = "doubly-linked-list" />Doubly Linked List
-Doubly linked list is probably the most widely used version of all linked lists (at least in the structural sense). The name comes from the fact, that each element of the list contains two links: `next`, linking to the next element, and `prev`, linking to the previous element. Pointer to the first element called `head` is stored in the list object itself. In other versions last element (pointer `tail`) may also be tracked.
+Doubly linked list is probably the most widely used version of all linked lists (at least in the structural sense). The name comes from the fact, that each element of the list contains two links: `next`, linking to the next element, and `prev`, linking to the previous element. Elements also contain a field called `key` which represents some actual data being stored in the element (either directly in or as an [`unique_ptr`](http://en.cppreference.com/w/cpp/memory/unique_ptr) to some outside location). Pointer to the first element called `head` is stored in the list object itself. In other versions last element (pointer `tail`) may also be tracked.
 
 Doubly linked list can be correct by construction by using [`unique_ptr`](http://en.cppreference.com/w/cpp/memory/unique_ptr) in one link direction, and raw pointer `*` in the another direction. In this implementation [`unique_ptr`](http://en.cppreference.com/w/cpp/memory/unique_ptr) points forward and also constitutes a `head` of the list. Such arrangement guarantees a proper resource deallocation when the list goes out of scope or some link is broken.
 
