@@ -6,3 +6,9 @@ This is a sandbox repository for playing with more or less exotic versions of da
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Code is released under MIT License. It can be freely used as long as the original creator is attributed. Software provided comes with no warranty.
+
+## Table of Contents
+ - [Lists](#lists)
+ 
+
+## <a name = "lists" />Lists
