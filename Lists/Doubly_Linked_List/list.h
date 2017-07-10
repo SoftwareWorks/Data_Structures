@@ -7,10 +7,10 @@
 template <typename T>
 class List
 {
-    template <typename U> class Node;
+    template <typename> class Node;
 
 public:
-    List()
+    List() : _head(nullptr), _tail(nullptr)
     {
         std::cout << "List created" << std::endl;
     }
@@ -18,11 +18,13 @@ public:
     List(const List<T> &list)
     {
         _head = std::move(list._head);
+        _tail = list._tail;
     }
 
     List(List<T> &&list)
     {
         _head = std::move(list._head);
+        _tail = std::move(list._tail);
     }
 
     ~List()
@@ -32,7 +34,12 @@ public:
 
     Node<T>* head()
     {
-        return *_head;
+        return _head.get();
+    }
+
+    Node<T>* tail()
+    {
+        return _tail;
     }
 
     Node<T>* search(const T &t)
@@ -52,15 +59,40 @@ public:
         if(_head != nullptr) _head->_prev = node.get();
         node->_next = std::move(_head);
         node->_prev = nullptr;
+
+        if(_tail == nullptr) _tail = node.get();
         _head = std::move(node);
+    }
+
+    void insertBefore(Node<T> *n, const T &t)
+    {
+        auto node = std::make_unique<Node<T>>(t);
+
+        if(n->_prev == nullptr) //when n is list's head
+        {
+            node->_next = std::move(_head);
+            node->_prev = nullptr;
+
+            _head = std::move(node);
+        }
+        else
+        {
+            node->_next = std::move(n->_prev->_next);
+            node->_prev = n->_prev;
+
+            n->_prev->_next = std::move(node);
+            n->_prev = node.get();
+        }
     }
 
     void remove(Node<T> *node)
     {
-        if(node->_prev != nullptr) node->_prev->_next = std::move(node->_next);
-        else _head = std::move(node->_next);
+        if(node == _tail) _tail = node->_prev;
 
         if(node->_next != nullptr) node->_next->_prev = node->_prev;
+
+        if(node->_prev != nullptr) node->_prev->_next = std::move(node->_next);
+        else _head = std::move(node->_next);
     }
 
     List<T>& operator=(const List<T> &list)
@@ -76,17 +108,18 @@ public:
     }
 
 private:
-    std::unique_ptr<Node<T>> _head = nullptr;
+    std::unique_ptr<Node<T>> _head;
+    Node<T> *_tail;
 };
 
 template <typename T>
-template <typename U>
+template <typename>
 class List<T>::Node
 {
     friend class List;
 
 public:
-    Node(const T &t) : _key(t)
+    Node(const T &t) : _next(nullptr), _prev(nullptr), _key(t)
     {
         std::cout << "Node " << _key << " created" << std::endl;
     }

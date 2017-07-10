@@ -17,5 +17,13 @@ int main()
     std::cout << (list.search(3) != nullptr) << std::endl;
     std::cout << (list.search(4) != nullptr) << std::endl;
 
+    list.insertBefore(list.search(2), 4);
+    std::cout << (list.search(4) != nullptr) << std::endl;
+
+    list.insertBefore(list.search(4), 5);
+    list.insertBefore(list.search(1), 6);
+    std::cout << (list.search(5) != nullptr) << std::endl;
+    std::cout << (list.search(6) != nullptr) << std::endl;
+
     return 0;
 }
