@@ -10,6 +10,7 @@ Code is released under MIT License. It can be freely used as long as the origina
 ## Table of Contents
  - [Linked Lists](#linked-lists)
    - [Doubly Linked List](#doubly-linked-list)
+   - [Singly Linked List](#singly-linked-list)
 
 ## <a name="linked-lists" />Linked Lists
 Linked lists are basic, node-based structures in which nodes are connected directly to one another in a linear order using links created by some kind of object-pointing mechanism (e.g. pointers or references). Considering a linked list with n elements, three basic operations can be distinguished:
@@ -31,3 +32,14 @@ Doubly linked list is probably the most widely used version of all linked lists 
 Doubly linked list can be correct by construction by using [`unique_ptr`](http://en.cppreference.com/w/cpp/memory/unique_ptr) in one link direction, and raw pointer `*` in the another direction. In this implementation [`unique_ptr`](http://en.cppreference.com/w/cpp/memory/unique_ptr) points forward and also constitutes a `head` of the list. Such arrangement guarantees a proper resource deallocation when the list goes out of scope or some link is broken.
 
 The templatized source code for the doubly linked list is provided in [`list.h`](https://github.com/ignmiz/Data_Structures/blob/master/Lists/Doubly_Linked_List/list.h) and contains some I/O instructions in constructors and destructors that help to verify that. Bear in mind that when using them, the template type must be ostreamable (must contain `operator<<` for [`std::ostream`](http://en.cppreference.com/w/cpp/io/basic_ostream)). [`main.cpp`](https://github.com/ignmiz/Data_Structures/blob/master/Lists/Doubly_Linked_List/main.cpp) then tests the list allocation and the basic operations printing the results along the way.
+
+### <a name="singly-linked-list" />Singly Linked List
+Singly linked list presents a kind of (rather harsh) tradeoff between operational efficiency and memory usage. By eliminating backlinks, one pointer size per every node can be saved. Sounds silly, but on primitive microsystems it may actually make a difference. This kind of list can be traversed only in one direction, so the tail pointer is also useless.
+
+<p align="center">
+  <img src="https://github.com/ignmiz/Images/blob/master/Data_Structures/singly_linked_list.png">
+</p>
+
+However, lost information about predecessors in the chain of nodes has quite a serious impact on the elasticity of operations. Fast O(1) insertions can be performed only at the head, same with deletions (unless a handle to the predecessor is somehow known). Otherwise the previous node needs to be found by traversing the list. Searches can proceed only in one direction.
+
+Bearing that in mind, areas of applications of singly linked lists are rather limited. Here, implementation is provided in [`list.h`](https://github.com/ignmiz/Data_Structures/blob/master/Lists/Singly_Linked_List/list.h) and some tests in [`main.cpp`](https://github.com/ignmiz/Data_Structures/blob/master/Lists/Singly_Linked_List/main.cpp). RAII scheme is essentialy the same as in the doubly linked list.
